@@ -95,6 +95,24 @@ body.theme-day .subtitle {
   color: #475569;
 }
 
+.fullscreen-hint {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+body.theme-day .fullscreen-hint {
+  background: rgba(249, 115, 22, 0.15);
+  color: #b45309;
+}
+
 .header-actions {
   display: flex;
   gap: 12px;
@@ -579,6 +597,19 @@ body.theme-day .possession-summary {
   gap: 6px;
 }
 
+.fullscreen-card {
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid #1f2a44;
+  width: fit-content;
+}
+
+body.theme-day .fullscreen-card {
+  background: #fff7ed;
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
 body.theme-day .timer-card {
   background: #ffffff;
   border-color: rgba(15, 23, 42, 0.15);
@@ -693,6 +724,12 @@ body.theme-day .timer-display {
 .board-card {
   flex: 1;
   min-height: 0;
+}
+
+.fullscreen-center {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
 }
 
 .category {
