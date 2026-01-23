@@ -133,6 +133,10 @@ body.theme-day .header-actions select.btn {
   color: #0f172a;
 }
 
+body.theme-day .fullscreen-card .btn {
+  color: #0f172a;
+}
+
 body.fullscreen-mode .app-header {
   position: sticky;
   top: 0;
@@ -603,6 +607,9 @@ body.theme-day .possession-summary {
   background: rgba(15, 23, 42, 0.55);
   border: 1px solid #1f2a44;
   width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 body.theme-day .fullscreen-card {
@@ -730,6 +737,7 @@ body.theme-day .timer-display {
   margin-top: 10px;
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .category {
