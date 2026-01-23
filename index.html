@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeopardy Football Field</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <img
+          class="sb-logo"
+          src="https://content.sportslogos.net/logos/7/593/full/_super_bowl_logo_primary_2025sportslogosnet5684.png"
+          alt="Super Bowl 60 Logo"
+        />
+        <div>
+          <h1>Super Bowl Sabha Jeopardy</h1>
+          <p class="subtitle">Answer questions correctly to earn yards, and score points.</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <select id="themeSelect" class="btn btn-outline">
+          <option value="night" selected>Night Game</option>
+          <option value="day">Day Game</option>
+        </select>
+        <button id="tipsBtn" class="btn btn-outline">Tips</button>
+        <button id="fullscreenBtn" class="btn btn-outline">Fullscreen</button>
+        <button id="newGameBtn" class="btn btn-outline">New Game</button>
+        <button id="resetBoardBtn" class="btn btn-outline">Reset Board</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="left-pane">
+        <div class="team-panel">
+          <h2>Teams</h2>
+          <div class="team-card" data-team="0">
+            <div class="team-icon team-red">R</div>
+            <div class="team-info">
+              <label>
+                Team Name
+                <input type="text" id="teamName0" />
+              </label>
+              <label>
+                Team Avatar
+                <select id="teamAvatar0">
+                  <option value="🦁" selected>🦁</option>
+                  <option value="🐻">🐻</option>
+                  <option value="🦅">🦅</option>
+                  <option value="🐺">🐺</option>
+                  <option value="🐯">🐯</option>
+                  <option value="🐬">🐬</option>
+                  <option value="🦬">🦬</option>
+                  <option value="🦈">🦈</option>
+                  <option value="🐉">🐉</option>
+                  <option value="🦊">🦊</option>
+                </select>
+              </label>
+              <label>
+                Team Color
+                <select id="teamColor0">
+                  <option value="#ef4444" selected>Red</option>
+                  <option value="#3b82f6">Blue</option>
+                  <option value="#10b981">Green</option>
+                  <option value="#f59e0b">Gold</option>
+                  <option value="#8b5cf6">Purple</option>
+                  <option value="#ec4899">Pink</option>
+                  <option value="#14b8a6">Teal</option>
+                  <option value="#ffffff">White</option>
+                  <option value="#111827">Black</option>
+                </select>
+              </label>
+              <div class="possession-row">
+                <span id="possession0" class="possession-badge">Offense</span>
+              </div>
+              <div class="team-metrics">
+                <div><span class="label">Yards</span><span id="teamYards0">0</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="team-card" data-team="1">
+            <div class="team-icon team-blue">B</div>
+            <div class="team-info">
+              <label>
+                Team Name
+                <input type="text" id="teamName1" />
+              </label>
+              <label>
+                Team Avatar
+                <select id="teamAvatar1">
+                  <option value="🦁">🦁</option>
+                  <option value="🐻" selected>🐻</option>
+                  <option value="🦅">🦅</option>
+                  <option value="🐺">🐺</option>
+                  <option value="🐯">🐯</option>
+                  <option value="🐬">🐬</option>
+                  <option value="🦬">🦬</option>
+                  <option value="🦈">🦈</option>
+                  <option value="🐉">🐉</option>
+                  <option value="🦊">🦊</option>
+                </select>
+              </label>
+              <label>
+                Team Color
+                <select id="teamColor1">
+                  <option value="#ef4444">Red</option>
+                  <option value="#3b82f6" selected>Blue</option>
+                  <option value="#10b981">Green</option>
+                  <option value="#f59e0b">Gold</option>
+                  <option value="#8b5cf6">Purple</option>
+                  <option value="#ec4899">Pink</option>
+                  <option value="#14b8a6">Teal</option>
+                  <option value="#ffffff">White</option>
+                  <option value="#111827">Black</option>
+                </select>
+              </label>
+              <div class="possession-row">
+                <span id="possession1" class="possession-badge">Defense</span>
+              </div>
+              <div class="team-metrics">
+                <div><span class="label">Yards</span><span id="teamYards1">0</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="quick-actions">
+            <button id="swapTeamsBtn" class="btn btn-ghost">Swap Team Colors</button>
+          </div>
+        </div>
+
+        <div class="timer-card">
+          <div class="timer-header">
+            <strong>Timer Settings</strong>
+            <label class="toggle">
+              <input type="checkbox" id="timerToggle" checked />
+              <span>On</span>
+            </label>
+          </div>
+          <label>
+            Time Limit
+            <select id="timerSelect">
+              <option value="30">30s</option>
+              <option value="45">45s</option>
+              <option value="60" selected>60s</option>
+              <option value="90">90s</option>
+            </select>
+          </label>
+        </div>
+
+      </section>
+
+      <section class="right-pane">
+        <div class="field-card">
+          <div class="field-header">
+            <h2>Football Field</h2>
+            <div class="scoreboard scoreboard-compact">
+              <div class="score-row">
+                <span id="scoreName0">Team Red</span>
+                <span id="scoreTD0">0 yards</span>
+              </div>
+              <div class="score-row">
+                <span id="scoreName1">Team Blue</span>
+                <span id="scoreTD1">0 yards</span>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="endzone left-endzone">
+              <span class="endzone-avatar" id="endzoneAvatar0">🦁</span>
+              <span id="endzoneName0" class="endzone-name">Team Red</span>
+            </div>
+            <div class="endzone right-endzone">
+              <span class="endzone-avatar" id="endzoneAvatar1">🐻</span>
+              <span id="endzoneName1" class="endzone-name">Team Blue</span>
+            </div>
+            <div class="yard-lines" id="yardLines"></div>
+            <img
+              class="field-logo"
+              src="https://content.sportslogos.net/logos/7/593/full/_super_bowl_logo_primary_2025sportslogosnet5684.png"
+              alt="Super Bowl 60 Logo"
+            />
+            <div id="tdBanner" class="td-banner hidden">TOUCHDOWN!</div>
+            <div id="turnBanner" class="turn-banner hidden">Now Team Turn</div>
+            <div class="team-marker team-red-marker" id="marker0">
+              <span class="marker-dot"></span>
+            </div>
+            <div class="team-marker team-blue-marker" id="marker1">
+              <span class="marker-dot"></span>
+            </div>
+            <div class="football-icon" id="footballIcon" aria-hidden="true">🏈</div>
+          </div>
+        </div>
+
+        <div class="board-card">
+          <h2>Jeopardy Board</h2>
+          <div id="board" class="board"></div>
+        </div>
+
+      </section>
+    </main>
+
+    <div id="questionModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalCategory">Category</h3>
+          <button id="closeModalBtn" class="btn btn-ghost">Close</button>
+        </div>
+        <div class="modal-body">
+          <div class="question-meta">
+            <span id="modalValue">100 yards</span>
+            <span id="modalStatus" class="status-pill">Unanswered</span>
+            <span id="modalTimer" class="timer-pill">60</span>
+          </div>
+          <p id="modalQuestion" class="question-text question-large"></p>
+          <div id="answerBlock" class="answer-block hidden">
+            <strong>Answer:</strong>
+            <span id="modalAnswer"></span>
+          </div>
+          <div class="modal-actions">
+            <button id="showAnswerBtn" class="btn btn-outline">Show Answer</button>
+            <button id="awardOffenseBtn" class="btn btn-red">Offense Correct</button>
+            <button id="awardDefenseBtn" class="btn btn-blue">Defense Steal</button>
+            <button id="noAwardBtn" class="btn btn-ghost">No Award</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="winnerOverlay" class="winner-overlay hidden">
+      <div class="winner-card">
+        <h2 id="winnerText">Winner!</h2>
+        <p>Game complete — all clues answered.</p>
+        <button id="closeWinnerBtn" class="btn btn-outline">Close</button>
+      </div>
+    </div>
+
+    <div id="tipsOverlay" class="modal hidden">
+      <div class="modal-content tips-content">
+        <div class="modal-header">
+          <h3>How To Play</h3>
+          <button id="closeTipsBtn" class="btn btn-ghost">Close</button>
+        </div>
+        <div class="modal-body">
+          <ul class="tips-list">
+            <li>Click a tile to open the question.</li>
+            <li>Reveal the answer, then award yards to the correct team.</li>
+            <li>Offense gains yards; defense can steal and push offense back.</li>
+            <li>Reach the end zone (100 yards) to score a touchdown.</li>
+            <li>Possession switches automatically after each question.</li>
+            <li>Timer is optional and adjustable from the left panel.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+  </html>
+
