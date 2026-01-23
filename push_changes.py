@@ -13,7 +13,6 @@ def run(cmd: list[str]) -> str:
 
 
 def main() -> None:
-    # Ensure we're inside a git repository.
     run(["git", "rev-parse", "--is-inside-work-tree"])
 
     status = run(["git", "status", "--porcelain"])
