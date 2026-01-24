@@ -28,7 +28,7 @@ const CATEGORIES = [
     title: "Football",
     clues: [
       { value: 10, question: "What shape is a football?", answer: "Oval." },
-      { value: 20, question: "What do players try to reach to score a touchdown?", answer: "The end zone." },
+      { value: 20, question: "What do players try to reach to score a touchdown?", answer: "End zone." },
       { value: 30, question: "How many points is a touchdown worth?", answer: "6 points." },
       { value: 40, question: "Who won the 2025 Super Bowl?", answer: "Philadelphia Eagles." },
       {
@@ -43,9 +43,13 @@ const CATEGORIES = [
     clues: [
       { value: 10, question: "How many Shlokas are in the Satsang Diksha?", answer: "315." },
       { value: 20, question: "Who wrote the Satsang Diksha?", answer: "Pragat Brahmaswarup Mahant Swami Maharaj." },
-      { value: 30, question: "TBD", answer: "TBD" },
-      { value: 40, question: "TBD", answer: "TBD" },
-      { value: 50, question: "TBD", answer: "TBD" },
+      { value: 30, question: "Where was the Satsang Diksha written?", answer: "Nenpur." },
+      { value: 40, question: "In which year was the Satsang Diksha given to us?", answer: "2020." },
+      {
+        value: 50,
+        question: "What is the first Satsang Diksha Shlok? (Swaminarayan Bhagwan etle ke sākshāt…)",
+        answer: "Swaminarayan Bhagwan etle ke sākshāt Akshar-Purushottam Maharaj sarvane param shānti, ānand ane sukh arpe.",
+      },
     ],
   },
   {
@@ -63,7 +67,7 @@ const CATEGORIES = [
     clues: [
       { value: 10, question: "At what age did Ghanshyam leave his home?", answer: "11." },
       { value: 20, question: "What were the names of Maharaj’s parents?", answer: "Dharmadev and Bhaktimata." },
-      { value: 30, question: "How many mandirs did Shastriji Maharaj build?", answer: "5." },
+      { value: 30, question: "How many beads does a mala have?", answer: "108." },
       {
         value: 40,
         question: "What year was Maharaj born?",
@@ -80,10 +84,14 @@ const CATEGORIES = [
         question: "What was the name Maharaj was recognized by when he was traveling across India in his teenage years?",
         answer: "Nilkanth Varni.",
       },
-      { value: 20, question: "How many planets are in the solar system?", answer: "8." },
+      { value: 20, question: "What is the tallest animal on Earth?", answer: "Giraffe." },
       { value: 30, question: "How many players from each team are on a football field at once?", answer: "11." },
       { value: 40, question: "How many mandirs did Maharaj make?", answer: "6." },
-      { value: 50, question: "TBD", answer: "TBD" },
+      {
+        value: 50,
+        question: "What are the five mandirs that Shastriji Maharaj built?",
+        answer: "Bochasan, Sarangpur, Gondal, Atladra, Gadhada.",
+      },
     ],
   },
 ];
@@ -102,7 +110,6 @@ const awardDefenseBtn = document.getElementById("awardDefenseBtn");
 const noAwardBtn = document.getElementById("noAwardBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const newGameBtn = document.getElementById("newGameBtn");
-const resetBoardBtn = document.getElementById("resetBoardBtn");
 const swapTeamsBtn = document.getElementById("swapTeamsBtn");
 
 const teamNameInputs = [document.getElementById("teamName0"), document.getElementById("teamName1")];
@@ -432,14 +439,16 @@ function checkGameOver() {
   }
   const [teamA, teamB] = state.teams;
   let message = "It's a tie!";
-  if (teamA.points > teamB.points) {
+  if (teamA.totalYards > teamB.totalYards) {
     message = `${teamA.name} wins!`;
-  } else if (teamB.points > teamA.points) {
+  } else if (teamB.totalYards > teamA.totalYards) {
     message = `${teamB.name} wins!`;
   }
-  winnerText.textContent = message;
+  if (winnerText) {
+    winnerText.textContent = message;
+  }
   winnerOverlay.classList.remove("hidden");
-  triggerCelebration(teamA.points >= teamB.points ? teamA.color : teamB.color);
+  triggerCelebration(teamA.totalYards >= teamB.totalYards ? teamA.color : teamB.color);
 }
 
 function calculateYards(baseValue) {
@@ -491,11 +500,14 @@ function setupTeamInputs() {
 
 function setupTeamAvatars() {
   teamAvatarInputs.forEach((input, index) => {
-    input.addEventListener("change", (event) => {
+    const handler = (event) => {
       state.teams[index].avatar = event.target.value;
       saveState();
       updateTeamInitials();
-    });
+      updateScoreboard();
+    };
+    input.addEventListener("change", handler);
+    input.addEventListener("input", handler);
   });
 }
 
@@ -636,14 +648,6 @@ function swapTeamColors() {
   updateScoreboard();
 }
 
-function resetBoard() {
-  state.usedClues = {};
-  saveState();
-  logEvent("Board reset.");
-  buildBoard();
-  if (winnerOverlay) winnerOverlay.classList.add("hidden");
-}
-
 function newGame() {
   state = structuredClone(DEFAULT_STATE);
   saveState();
@@ -661,7 +665,6 @@ awardDefenseBtn.addEventListener("click", () => awardClue(1 - state.offenseIndex
 noAwardBtn.addEventListener("click", () => awardClue(null));
 closeModalBtn.addEventListener("click", closeModal);
 newGameBtn.addEventListener("click", newGame);
-resetBoardBtn.addEventListener("click", resetBoard);
 swapTeamsBtn.addEventListener("click", swapTeamColors);
 closeWinnerBtn.addEventListener("click", () => winnerOverlay.classList.add("hidden"));
 
