@@ -23,7 +23,7 @@ const DEFAULT_STATE = {
   offenseIndex: 0,
 };
 
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
   {
     title: "Football",
     clues: [
@@ -96,6 +96,10 @@ const CATEGORIES = [
   },
 ];
 
+const CUSTOM_QUESTIONS_KEY = "jeopardy-custom-questions";
+
+let CATEGORIES = loadCustomQuestions();
+
 const boardEl = document.getElementById("board");
 const modalEl = document.getElementById("questionModal");
 const modalCategory = document.getElementById("modalCategory");
@@ -130,6 +134,14 @@ const closeWinnerBtn = document.getElementById("closeWinnerBtn");
 const tipsBtn = document.getElementById("tipsBtn");
 const tipsOverlay = document.getElementById("tipsOverlay");
 const closeTipsBtn = document.getElementById("closeTipsBtn");
+const editQuestionsBtn = document.getElementById("editQuestionsBtn");
+const editQuestionsOverlay = document.getElementById("editQuestionsOverlay");
+const closeEditQuestionsBtn = document.getElementById("closeEditQuestionsBtn");
+const categoryListEl = document.getElementById("categoryList");
+const categoryEditorEl = document.getElementById("categoryEditor");
+const saveQuestionsBtn = document.getElementById("saveQuestionsBtn");
+const resetQuestionsBtn = document.getElementById("resetQuestionsBtn");
+const questionsError = document.getElementById("questionsError");
 const endzoneNameEls = [document.getElementById("endzoneName0"), document.getElementById("endzoneName1")];
 const possessionEls = [document.getElementById("possession0"), document.getElementById("possession1")];
 const offenseNameEl = document.getElementById("offenseName");
@@ -224,6 +236,36 @@ function handleClueClick(catIndex, clueIndex) {
   if (!clue) return;
   activeClue = { catIndex, clueIndex, ...clue };
   openModal();
+}
+
+function loadCustomQuestions() {
+  const saved = localStorage.getItem(CUSTOM_QUESTIONS_KEY);
+  if (!saved) return structuredClone(DEFAULT_CATEGORIES);
+  try {
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed) && parsed.length) {
+      return parsed;
+    }
+  } catch (error) {
+    return structuredClone(DEFAULT_CATEGORIES);
+  }
+  return structuredClone(DEFAULT_CATEGORIES);
+}
+
+function validateQuestions(candidate) {
+  if (!Array.isArray(candidate) || candidate.length === 0) {
+    return "Questions must be an array of categories.";
+  }
+  for (const category of candidate) {
+    if (!category.title || !Array.isArray(category.clues)) {
+      return "Each category must have a title and clues array.";
+    }
+    for (const clue of category.clues) {
+      if (typeof clue.value !== "number") return "Each clue must include a numeric value.";
+      if (!clue.question || !clue.answer) return "Each clue must include question and answer.";
+    }
+  }
+  return null;
 }
 
 function openModal() {
@@ -535,6 +577,62 @@ function setupThemeSelect() {
   applyTheme(themeSelect.value);
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function openQuestionsEditor() {
+  questionsError.classList.add("hidden");
+  categoryListEl.innerHTML = "";
+  CATEGORIES.forEach((category, index) => {
+    const button = document.createElement("button");
+    button.className = "category-button";
+    button.type = "button";
+    button.textContent = category.title;
+    button.addEventListener("click", () => renderCategoryEditor(index));
+    categoryListEl.appendChild(button);
+  });
+  renderCategoryEditor(0);
+  editQuestionsOverlay.classList.remove("hidden");
+}
+
+function closeQuestionsEditor() {
+  editQuestionsOverlay.classList.add("hidden");
+}
+
+function renderCategoryEditor(index) {
+  const category = CATEGORIES[index];
+  Array.from(categoryListEl.children).forEach((child, idx) => {
+    child.classList.toggle("active", idx === index);
+  });
+  const rows = category.clues
+    .map(
+      (clue, clueIndex) => `
+        <div class="clue-row" data-index="${clueIndex}">
+          <input class="edit-input clue-value" type="number" value="${escapeHtml(clue.value)}" />
+          <textarea class="edit-textarea clue-question">${escapeHtml(clue.question)}</textarea>
+          <textarea class="edit-textarea clue-answer">${escapeHtml(clue.answer)}</textarea>
+        </div>
+      `
+    )
+    .join("");
+
+  categoryEditorEl.innerHTML = `
+    <label class="edit-label">
+      Category Title
+      <input id="categoryTitleInput" class="edit-input" type="text" value="${escapeHtml(category.title)}" />
+    </label>
+    <div class="clue-editor">${rows}</div>
+  `;
+
+  categoryEditorEl.dataset.activeIndex = String(index);
+}
+
 function setupFullscreen() {
   fullscreenBtn.addEventListener("click", async () => {
     if (!document.fullscreenElement) {
@@ -676,6 +774,60 @@ tipsBtn.addEventListener("click", () => tipsOverlay.classList.remove("hidden"));
 closeTipsBtn.addEventListener("click", () => tipsOverlay.classList.add("hidden"));
 tipsOverlay.addEventListener("click", (event) => {
   if (event.target === tipsOverlay) tipsOverlay.classList.add("hidden");
+});
+
+editQuestionsBtn.addEventListener("click", openQuestionsEditor);
+closeEditQuestionsBtn.addEventListener("click", closeQuestionsEditor);
+editQuestionsOverlay.addEventListener("click", (event) => {
+  if (event.target === editQuestionsOverlay) closeQuestionsEditor();
+});
+saveQuestionsBtn.addEventListener("click", () => {
+  questionsError.classList.add("hidden");
+  try {
+    const activeIndex = Number(categoryEditorEl.dataset.activeIndex || 0);
+    const titleInput = document.getElementById("categoryTitleInput");
+    const title = titleInput ? titleInput.value.trim() : "";
+    if (!title) {
+      questionsError.textContent = "Category title is required.";
+      questionsError.classList.remove("hidden");
+      return;
+    }
+
+    const rows = Array.from(categoryEditorEl.querySelectorAll(".clue-row"));
+    const clues = rows.map((row) => {
+      const value = Number(row.querySelector(".clue-value").value);
+      const question = row.querySelector(".clue-question").value.trim();
+      const answer = row.querySelector(".clue-answer").value.trim();
+      return { value, question, answer };
+    });
+
+    const updated = [...CATEGORIES];
+    updated[activeIndex] = { title, clues };
+
+    const error = validateQuestions(updated);
+    if (error) {
+      questionsError.textContent = error;
+      questionsError.classList.remove("hidden");
+      return;
+    }
+    CATEGORIES = updated;
+    localStorage.setItem(CUSTOM_QUESTIONS_KEY, JSON.stringify(updated));
+    state.usedClues = {};
+    saveState();
+    buildBoard();
+    closeQuestionsEditor();
+  } catch (error) {
+    questionsError.textContent = "Please check your entries and try again.";
+    questionsError.classList.remove("hidden");
+  }
+});
+resetQuestionsBtn.addEventListener("click", () => {
+  CATEGORIES = structuredClone(DEFAULT_CATEGORIES);
+  localStorage.removeItem(CUSTOM_QUESTIONS_KEY);
+  state.usedClues = {};
+  saveState();
+  buildBoard();
+  openQuestionsEditor();
 });
 
 buildYardLines();

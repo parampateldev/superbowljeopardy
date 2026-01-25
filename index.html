@@ -32,6 +32,7 @@
           <option value="day">Day Game</option>
         </select>
         <button id="tipsBtn" class="btn btn-outline">Tips</button>
+        <button id="editQuestionsBtn" class="btn btn-outline">Edit Questions</button>
         <button id="newGameBtn" class="btn btn-outline">New Game</button>
       </div>
     </header>
@@ -257,6 +258,31 @@
             <li>Possession switches automatically after each question.</li>
             <li>Timer is optional and adjustable from the left panel.</li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="editQuestionsOverlay" class="modal hidden">
+      <div class="modal-content edit-content">
+        <div class="modal-header">
+          <h3>Edit Questions (Local Only)</h3>
+          <button id="closeEditQuestionsBtn" class="btn btn-ghost">Close</button>
+        </div>
+        <div class="modal-body">
+          <div class="edit-layout">
+            <div class="edit-sidebar">
+              <p class="edit-help">Select a category to edit.</p>
+              <div id="categoryList" class="category-list"></div>
+            </div>
+            <div class="edit-main">
+              <div id="categoryEditor" class="category-editor"></div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button id="saveQuestionsBtn" class="btn btn-outline">Save</button>
+            <button id="resetQuestionsBtn" class="btn btn-ghost">Reset to Default</button>
+          </div>
+          <p id="questionsError" class="edit-error hidden"></p>
         </div>
       </div>
     </div>
