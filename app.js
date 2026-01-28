@@ -114,7 +114,7 @@ const awardDefenseBtn = document.getElementById("awardDefenseBtn");
 const noAwardBtn = document.getElementById("noAwardBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const newGameBtn = document.getElementById("newGameBtn");
-const swapTeamsBtn = document.getElementById("swapTeamsBtn");
+const switchPossessionBtn = document.getElementById("switchPossessionBtn");
 
 const teamNameInputs = [document.getElementById("teamName0"), document.getElementById("teamName1")];
 const teamAvatarInputs = [document.getElementById("teamAvatar0"), document.getElementById("teamAvatar1")];
@@ -736,14 +736,12 @@ function buildYardLines() {
   }
 }
 
-function swapTeamColors() {
-  const temp = state.teams[0].color;
-  state.teams[0].color = state.teams[1].color;
-  state.teams[1].color = temp;
+function switchPossession() {
+  state.offenseIndex = 1 - state.offenseIndex;
+  logEvent(`${state.teams[state.offenseIndex].name} takes possession.`);
+  showTurn(state.teams[state.offenseIndex].name);
   saveState();
-  updateTeamColors();
-  updateAwardButtons();
-  updateScoreboard();
+  updateUI();
 }
 
 function newGame() {
@@ -763,7 +761,7 @@ awardDefenseBtn.addEventListener("click", () => awardClue(1 - state.offenseIndex
 noAwardBtn.addEventListener("click", () => awardClue(null));
 closeModalBtn.addEventListener("click", closeModal);
 newGameBtn.addEventListener("click", newGame);
-swapTeamsBtn.addEventListener("click", swapTeamColors);
+switchPossessionBtn.addEventListener("click", switchPossession);
 closeWinnerBtn.addEventListener("click", () => winnerOverlay.classList.add("hidden"));
 
 modalEl.addEventListener("click", (event) => {
