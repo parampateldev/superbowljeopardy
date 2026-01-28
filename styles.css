@@ -512,10 +512,10 @@ body.theme-day .field {
 }
 
 .turn-banner {
-  position: absolute;
-  top: 58px;
-  left: 50%;
-  transform: translate(-50%, -8px);
+  position: relative;
+  margin: 8px auto 10px;
+  width: fit-content;
+  transform: translateY(-6px);
   padding: 6px 16px;
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.85);
@@ -537,7 +537,7 @@ body.theme-day .field {
 
 .turn-banner.show {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
 }
 
 .winner-overlay {

@@ -306,7 +306,7 @@ function awardClue(teamIndex) {
     showTurn(state.teams[state.offenseIndex].name);
     saveState();
     updateUI();
-  }, 1600);
+  }, 3600);
   closeModal();
 }
 
@@ -454,11 +454,11 @@ function showTouchdown(teamName) {
 
 function showPlayResult(teamName, yardsApplied) {
   if (!turnBanner) return;
-  const verb = yardsApplied > 0 ? "scored" : "lost";
+  const verb = yardsApplied > 0 ? "gained" : "lost";
   const yards = Math.abs(yardsApplied);
-  turnBanner.textContent = `${teamName} ${verb} ${yards} yards`;
+  turnBanner.textContent = `${teamName} ${verb} ${yards} yards.`;
   turnBanner.classList.remove("hidden");
-  setTimeout(() => turnBanner.classList.add("hidden"), 1600);
+  setTimeout(() => turnBanner.classList.add("hidden"), 3000);
 }
 
 function showTurn(teamName) {
@@ -469,7 +469,7 @@ function showTurn(teamName) {
   setTimeout(() => {
     turnBanner.classList.remove("show");
     turnBanner.classList.add("hidden");
-  }, 1600);
+  }, 2200);
 }
 
 function checkGameOver() {
