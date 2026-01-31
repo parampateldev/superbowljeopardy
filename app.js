@@ -299,6 +299,8 @@ function awardClue(teamIndex) {
   } else {
     logEvent("No award given for that clue.");
   }
+  saveState();
+  updateUI();
   const nextOffenseIndex = 1 - state.offenseIndex;
   setTimeout(() => {
     state.offenseIndex = nextOffenseIndex;
@@ -306,7 +308,7 @@ function awardClue(teamIndex) {
     showTurn(state.teams[state.offenseIndex].name);
     saveState();
     updateUI();
-  }, 3600);
+  }, 800);
   closeModal();
 }
 
