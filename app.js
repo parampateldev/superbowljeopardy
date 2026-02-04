@@ -460,6 +460,8 @@ function showPlayResult(teamName, yardsApplied) {
   const yards = Math.abs(yardsApplied);
   turnBanner.textContent = `${teamName} ${verb} ${yards} yards.`;
   turnBanner.classList.remove("hidden");
+  turnBanner.classList.remove("show");
+  requestAnimationFrame(() => turnBanner.classList.add("show"));
   setTimeout(() => turnBanner.classList.add("hidden"), 3000);
 }
 
