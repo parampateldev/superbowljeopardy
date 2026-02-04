@@ -201,6 +201,39 @@ body.fullscreen-mode .layout {
   margin-bottom: 12px;
 }
 
+.field-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.field-title h2 {
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.field-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.field-badge-large {
+  font-size: 1.8rem;
+  padding: 10px 40px;
+  letter-spacing: 1.0px;
+}
+
+body.theme-day .field-badge {
+  background: rgba(249, 115, 22, 0.2);
+  color: #b45309;
+}
 .scoreboard-compact {
   min-width: 260px;
 }
@@ -655,6 +688,13 @@ body.theme-day .timer-display {
 .score-row {
   display: flex;
   justify-content: space-between;
+}
+
+.score-team {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
 }
 
 .team-marker {

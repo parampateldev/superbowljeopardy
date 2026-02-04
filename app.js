@@ -122,6 +122,7 @@ const teamColorInputs = [document.getElementById("teamColor0"), document.getElem
 const teamCards = Array.from(document.querySelectorAll(".team-card"));
 const teamYardsEls = [document.getElementById("teamYards0"), document.getElementById("teamYards1")];
 const scoreboardNameEls = [document.getElementById("scoreName0"), document.getElementById("scoreName1")];
+const scoreboardAvatarEls = [document.getElementById("scoreAvatar0"), document.getElementById("scoreAvatar1")];
 const scoreboardTDEls = [document.getElementById("scoreTD0"), document.getElementById("scoreTD1")];
 const markers = [document.getElementById("marker0"), document.getElementById("marker1")];
 const footballIcon = document.getElementById("footballIcon");
@@ -324,6 +325,9 @@ function updateScoreboard() {
     teamYardsEls[index].textContent = team.totalYards;
     scoreboardNameEls[index].textContent = team.name;
     scoreboardTDEls[index].textContent = `${team.totalYards} yards`;
+    if (scoreboardAvatarEls[index]) {
+      scoreboardAvatarEls[index].textContent = team.avatar;
+    }
     endzoneNameEls[index].textContent = team.name;
     endzoneAvatarEls[index].textContent = team.avatar;
     teamAvatarInputs[index].value = team.avatar;
